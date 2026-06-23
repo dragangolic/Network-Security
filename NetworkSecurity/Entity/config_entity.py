@@ -5,7 +5,7 @@ from NetworkSecurity.Constants import training_pipeline
 print(f"Training pipeline name: {training_pipeline.PIPELINE_NAME}")
 print(f"Artifact directory: {training_pipeline.ARTIFACT_DIR}")
 
-class TrainingPipelineConfig:
+class TrainingPipelineConfig:  
     def __init__(self,timestamp=datetime.now()):
         timestemp= timestemp.strftime("%m_%d_%Y_%H_%M_%S")
         self.pipeline_name= training_pipeline.PIPELINE_NAME
