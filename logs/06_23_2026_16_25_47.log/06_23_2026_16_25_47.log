@@ -1,0 +1,4 @@
+[2026-06-23 16:25:48,244] 12 root - INFO - Starting data ingestion process
+[2026-06-23 16:25:49,010] 63 root - INFO - Performed train test split on the dataset
+[2026-06-23 16:25:49,010] 64 root - INFO - Exit from the split_data_as_train_test method of DataIngestion class
+[2026-06-23 16:25:49,014] 70 root - INFO - Exported training and testing dataset into feature store

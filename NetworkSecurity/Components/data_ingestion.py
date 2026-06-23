@@ -3,6 +3,7 @@ from NetworkSecurity.Logging.logger import logging
 
 ## Configuration of the Data Ingestion Config
 from NetworkSecurity.Entity.config_entity import DataIngestionConfig
+from NetworkSecurity.Entity.artifact_entity import DataIngestionArtifact
 import os, sys
 import numpy as np
 import pandas as pd
@@ -19,6 +20,7 @@ class DataIngestion:
     def __init__(self, data_ingestion_config: DataIngestionConfig):
         try:
             self.data_ingestion_config = data_ingestion_config
+            self.mongo_client = pymongo.MongoClient(MONGO_DB_URL)
         except Exception as e:
             raise NetworkSecurityException(e, sys) 
 
@@ -27,14 +29,15 @@ class DataIngestion:
         try:
             database_name = self.data_ingestion_config.database_name
             collection_name = self.data_ingestion_config.collection_name
+            
             collection = self.mongo_client[database_name][collection_name]
-            self.mongo_client = pymongo.MongoClient(MONGO_DB_URL)
-
+            
             df = pd.DataFrame(list(collection.find()))
+            
             if "_id" in df.columns:
                 df.drop(columns=["_id"], inplace=True)
 
-            df.replace(to_replace="na", value=np.NAN, inplace=True)
+            df.replace(to_replace="na", value=np.nan, inplace=True)
             return df
 
         except Exception as e:
@@ -75,6 +78,11 @@ class DataIngestion:
             dataframe = self.export_collection_as_dataframe()
             dataframe = self.export_data_into_feature_store(dataframe)
             self.split_data_as_train_test(dataframe)
+            dataingestionartifact = DataIngestionArtifact(
+                trained_file_path=self.data_ingestion_config.training_file_path,
+                test_file_path=self.data_ingestion_config.testing_file_path
+            )
+            return dataingestionartifact
         except Exception as e:
             raise NetworkSecurityException(e, sys) 
     
