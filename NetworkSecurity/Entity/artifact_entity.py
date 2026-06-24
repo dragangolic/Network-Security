@@ -7,7 +7,7 @@ class DataIngestionArtifact:
     test_file_path: str
 
 @dataclass
-class DataIngestionArtifact:
+class DataValidationArtifact:
     validation_status: bool
     valid_train_file_path: str
     valid_test_file_path: str
