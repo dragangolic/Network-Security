@@ -35,7 +35,7 @@ DATA_VALIDATION_INVALID_DIR: str = "invalid"
 DATA_VALIDATION_DRIFT_REPORT_DIR: str = "drift_report"
 DATA_VALIDATION_DRIFT_REPORT_FILE_NAME: str = "report.yaml"
 PREPROCESSING_OBJECT_FILE_NAME: str="preprocessing.pkl"
- 
+
 '''
 Data Transformation related content start with DATA_TRANSFORMATION VAR NAME
 '''
@@ -48,3 +48,12 @@ DATA_TRANSFORMATION_IMPUTER_PARAMS: dict = {
     "n_neighbors": 3,
     "weights": "uniform"
 }
+
+'''
+MOdel Trainer related constant start with MODEL TRAINER VAR NAME
+'''
+MODEL_TRAINER_DIR_NAME: str = "model_trainer"
+MODEL_TRAINER_TRAINED_MODEL_DIR: str = "trained_model"
+MODEL_TRAINER_TRAINED_MODEL_NAME: str = "model.pkl"
+MODEL_TRAINER_EXPECTED_SCORE: float = 0.6
+MODEL_TRAINER_OVER_FITTING_ENDER_FITTING_THRESHOLD: float = 0.05 

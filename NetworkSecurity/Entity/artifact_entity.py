@@ -20,3 +20,4 @@ class DataTransformationArtifact:
     transformation_object_file_path: str
     transformation_train_file_path: str
     transformation_test_file_path: str
+
