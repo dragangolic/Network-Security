@@ -83,6 +83,7 @@ class DataTransformation:
                 transformation_train_file_path = self.data_transformation_config.transformation_train_file_path,
                 transformation_test_file_path = self.data_transformation_config.transformation_test_file_path,
             )
+            return data_transformation_artifact
 
         except Exception as e:
             raise NetworkSecurityException(e, sys) 

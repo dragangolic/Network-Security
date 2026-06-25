@@ -1,0 +1,18 @@
+[2026-06-25 15:11:40,430] 15 root - INFO - Starting data ingestion process
+[2026-06-25 15:11:41,064] 63 root - INFO - Performed train test split on the dataset
+[2026-06-25 15:11:41,064] 64 root - INFO - Exit from the split_data_as_train_test method of DataIngestion class
+[2026-06-25 15:11:41,066] 70 root - INFO - Exported training and testing dataset into feature store
+[2026-06-25 15:11:41,066] 18 root - INFO - Data ingestion completed
+[2026-06-25 15:11:41,070] 23 root - INFO - Starting data validation
+[2026-06-25 15:11:41,072] 32 root - INFO - Required number of columns: 2
+[2026-06-25 15:11:41,072] 33 root - INFO - Data frame has columns:31
+[2026-06-25 15:11:41,072] 32 root - INFO - Required number of columns: 2
+[2026-06-25 15:11:41,072] 33 root - INFO - Data frame has columns:31
+[2026-06-25 15:11:41,088] 25 root - INFO - Data validation completed
+[2026-06-25 15:11:41,088] 29 root - INFO - Starting data transformation
+[2026-06-25 15:11:41,088] 50 root - INFO - Entered initiate.. method of DataTransformation class
+[2026-06-25 15:11:41,088] 52 root - INFO - Starting data transformation
+[2026-06-25 15:11:41,090] 40 root - INFO - Enter get_data_transformation_object method of Transformation class
+[2026-06-25 15:11:41,097] 43 root - INFO - Entered the save_object method of Mainutils class
+[2026-06-25 15:11:41,097] 47 root - INFO - Exited the save_object method of Mainutils class
+[2026-06-25 15:11:41,097] 32 root - INFO - Data transformation completed
