@@ -14,6 +14,9 @@ FILE_NAME: str = "dataset_10k.csv"
 TRAIN_FILE_NAME: str = "train.csv"
 TEST_FILE_NAME: str = "test.csv"
 
+SAVED_MODEL_DIR = os.path.join("saved_models")
+MODEL_FILE_NAME = "model.pkl"
+
 '''
 Data Ingestion related content start with DATA_INGESTION VAR NAME
 '''
@@ -36,6 +39,7 @@ DATA_VALIDATION_DRIFT_REPORT_DIR: str = "drift_report"
 DATA_VALIDATION_DRIFT_REPORT_FILE_NAME: str = "report.yaml"
 PREPROCESSING_OBJECT_FILE_NAME: str="preprocessing.pkl"
 
+
 '''
 Data Transformation related content start with DATA_TRANSFORMATION VAR NAME
 '''
@@ -57,3 +61,4 @@ MODEL_TRAINER_TRAINED_MODEL_DIR: str = "trained_model"
 MODEL_TRAINER_TRAINED_MODEL_NAME: str = "model.pkl"
 MODEL_TRAINER_EXPECTED_SCORE: float = 0.6
 MODEL_TRAINER_OVER_FITTING_ENDER_FITTING_THRESHOLD: float = 0.05 
+
