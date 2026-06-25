@@ -1,0 +1,13 @@
+# Query: data_validation_atifact
+# ContextLines: 1
+
+2 results - 1 file
+
+NetworkSecurity/Components/data_transformation.py:
+  16          try:
+  17:             self.data_validation_artifact:DataValidationArtifact=data_validation_artifact
+  18              self.data_transformation_config:DataTransformationConfig=data_transformation_config
+
+  32              logging.info("Starting data transformation")
+  33:             train_df = DataTransformation.read_data(self.data_validation_artifact)
+  34          except Exception as e:
