@@ -70,6 +70,28 @@ class ModelTrainer:
             list(model_report.values()).index(best_model_score)
         ]
         best_model = models[best_model_name]
+        y_train_pred = best_model.predict(X_train)
+
+        classification_train_metric = get_classification_score(y_true = y_train, y_pred = y_train_pred)
+
+        ## Track the mlflow
+        y_test_pred = best_model.predict(X_test)
+        classification_test_metric = get_classification_score(y_true=y_test, y_pred=y_test_pred)
+
+        preprocessor = load_object(file_path=self.data_transformation_artifact.transformation_object_file_path)
+        model_dir_path = os.path.dirname(self.model_trainer_config.trained_model_file_path)
+        os.makedirs(model_dir_path, exist_ok=True)
+
+        Network_Model = NetworkModel(preprocessor=preprocessor, model=best_model)
+        save_object(self.model_trainer_config.trained_model_file_path, obj=NetworkModel)
+
+        # MOdel trainer artifact
+        model_trainer_artifact = ModelTrainerArtifact(trained_model_file_path=self.model_trainer_config.trained_model_file_path,
+                             trained_metric_artifact=classification_train_metric,
+                             test_metric_artifact=classification_test_metric
+                             )
+        logging.info(f"MOdel trainer artifact: {model_trainer_artifact}") 
+        return model_trainer_artifact
 
     def initiate_model_trainer(self) -> ModelTrainerArtifact:
         try:
@@ -86,7 +108,7 @@ class ModelTrainer:
                 test_arr[:, :-1],
                 test_arr[:, -1]
             )
-            model = self.train_model(X_train, y_train)
+            model = self.train_model(X_train, y_train, X_test, y_test)
 
         except Exception as e:
             raise NetworkSecurityException(e, sys)
