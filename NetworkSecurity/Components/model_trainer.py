@@ -18,6 +18,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import (
     AdaBoostClassifier,GradientBoostingClassifier, RandomForestClassifier
 )
+import mlflow
 
 
 class ModelTrainer:
@@ -29,12 +30,23 @@ class ModelTrainer:
         except Exception as e:
             raise NetworkSecurityException(e, sys)
     
+    def track_mlflow(self, best_model, classificationmetric):
+        with mlflow.start_run():
+            f1_score = classificationmetric.f1_score
+            precision_score = classificationmetric.precision_score
+            recall_score = classificationmetric.recall_score
+
+            mlflow.log_metric("f1_score", f1_score)
+            mlflow.log_metric("precision", precision_score)
+            mlflow.log_metric("recall", recall_score)
+            mlflow.sklearn.log_model(best_model,"model")
+
     def train_model(self, X_train, y_train, X_test, y_test):
         models = {
-            "Random Forest": RandomForestClassifier(verbose=1),
+            "Random Forest": RandomForestClassifier(verbose=0),
             "Decision Tree": DecisionTreeClassifier(),
-            "Gradient Boosting": GradientBoostingClassifier(verbose=1),
-            "Logistic Regresion": LogisticRegression(verbose=1),
+            "Gradient Boosting": GradientBoostingClassifier(verbose=0),
+            "Logistic Regresion": LogisticRegression(verbose=0),
             "Adaboost": AdaBoostClassifier()
         }
         params = {
@@ -49,9 +61,9 @@ class ModelTrainer:
                 # 'max_features':['sqrt', 'log2', None]
             },
             "Gradient Boosting": {
-                "learning_rate": [.1, .01, .05, .001],
-                "subsample": [0.6, 0.7, 0.75, 0.8, 0.85, 0.9],
-                "n_estimators": [8,16,32,64,128,256],
+                "learning_rate": [0.01, .01],
+                "subsample": [0.8, 1.0],
+                "n_estimators": [50, 100],
                 # 'loss': ['log_loss', 'exponential']
             },
             "Logistic Regresion": {},
@@ -74,9 +86,14 @@ class ModelTrainer:
 
         classification_train_metric = get_classification_score(y_true = y_train, y_pred = y_train_pred)
 
-        ## Track the mlflow
+        ## Track the experiments with mlflow
+        self.track_mlflow(best_model, classification_train_metric)
+
         y_test_pred = best_model.predict(X_test)
         classification_test_metric = get_classification_score(y_true=y_test, y_pred=y_test_pred)
+
+        # self.track_mlflow(best_model, classification_test_metric)
+
 
         preprocessor = load_object(file_path=self.data_transformation_artifact.transformation_object_file_path)
         model_dir_path = os.path.dirname(self.model_trainer_config.trained_model_file_path)
@@ -86,9 +103,10 @@ class ModelTrainer:
         save_object(self.model_trainer_config.trained_model_file_path, obj=NetworkModel)
 
         # MOdel trainer artifact
-        model_trainer_artifact = ModelTrainerArtifact(trained_model_file_path=self.model_trainer_config.trained_model_file_path,
-                             trained_metric_artifact=classification_train_metric,
-                             test_metric_artifact=classification_test_metric
+        model_trainer_artifact = ModelTrainerArtifact(
+                            trained_model_file_path=self.model_trainer_config.trained_model_file_path,
+                            trained_metric_artifact=classification_train_metric,
+                            test_metric_artifact=classification_test_metric
                              )
         logging.info(f"MOdel trainer artifact: {model_trainer_artifact}") 
         return model_trainer_artifact
