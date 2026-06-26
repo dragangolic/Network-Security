@@ -5,8 +5,10 @@ import os, sys
 import numpy as np
 import dill
 import pickle
-from sklearn.metrics import r2_score
+from sklearn.metrics import f1_score
 from sklearn.model_selection import RandomizedSearchCV
+from sklearn.base import clone
+
 
 def read_yaml_file(file_path: str) -> dict:
     try:
@@ -75,32 +77,42 @@ def evaluate_models(X_train, y_train, X_test, y_test, models, param):
     try:
         report = {}
 
-        for i in range(len(list(models))):
-            model = list(models.values())[i]
-            para = param[list(models.keys())[i]]
+        best_model = None
+        best_model_score = -1
+        best_model_name = None
+
+        for name, model in models.items():
+            model = clone(model)
+            para = param.get(name, {})
 
             gs = RandomizedSearchCV(
-                                    model, para, cv=3,
-                                    n_iter=5,   # LIMIT SEARCH
-                                    n_jobs=-1
-                                )
+                model,
+                para,
+                cv=3,
+                n_iter=5,
+                n_jobs=-1,
+                random_state=42
+            )
+
             gs.fit(X_train, y_train)
 
-            model.set_params(**gs.best_params_)
-            model.fit(X_train, y_train)
+            current_model = gs.best_estimator_
 
-            # model.fit(X_train, y_train) 
+            y_train_pred = current_model.predict(X_train)
+            y_test_pred = current_model.predict(X_test)
 
-            y_train_pred = model.predict(X_train)
-            y_test_pred = model.predict(X_test)
+            train_score = f1_score(y_train, y_train_pred)
+            test_score = f1_score(y_test, y_test_pred)
 
-            train_model_score = r2_score(y_train, y_train_pred)
-            test_model_score = r2_score(y_test, y_test_pred)
+            report[name] = test_score
 
-            report[list(models.keys())[i]] = test_model_score
+            # track best model
+            if test_score > best_model_score:
+                best_model_score = test_score
+                best_model = current_model
+                best_model_name = name
 
-        return report
-    
+        return report, best_model, best_model_name
+
     except Exception as e:
         raise NetworkSecurityException(e, sys) from e
-    
