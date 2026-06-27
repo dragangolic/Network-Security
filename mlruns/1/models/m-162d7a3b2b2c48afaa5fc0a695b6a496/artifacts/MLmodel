@@ -1,0 +1,23 @@
+artifact_path: /Users/dragangolic/Coding Projects/NetworkSecurity/mlruns/1/models/m-162d7a3b2b2c48afaa5fc0a695b6a496/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.skops
+    predict_fn: predict
+    python_version: 3.13.2
+  sklearn:
+    code: null
+    pickled_model: model.skops
+    serialization_format: skops
+    sklearn_version: 1.9.0
+    skops_trusted_types: null
+mlflow_version: 3.14.0
+model_id: m-162d7a3b2b2c48afaa5fc0a695b6a496
+model_size_bytes: 2451459
+model_uuid: m-162d7a3b2b2c48afaa5fc0a695b6a496
+prompts: null
+run_id: bd06651c73144827809f0634060e6426
+utc_time_created: '2026-06-27 11:02:45.154824'
