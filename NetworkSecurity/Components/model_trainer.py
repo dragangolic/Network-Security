@@ -19,6 +19,9 @@ from sklearn.ensemble import (
     AdaBoostClassifier, GradientBoostingClassifier, RandomForestClassifier
 )
 import mlflow
+import dagshub
+#dagshub.init(repo_owner='Dragan', repo_name='Network-Security', mlflow=True)
+
 
 # ---------------- MLflow setup (runs once, at import time) ----------------
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -124,8 +127,9 @@ class ModelTrainer:
 
         save_object(
             file_path=self.model_trainer_config.trained_model_file_path,
-            obj=network_model
+            obj=NetworkModel
         )
+        save_object("final_model/model.pkl", best_model)
 
         model_trainer_artifact = ModelTrainerArtifact(
             trained_model_file_path=self.model_trainer_config.trained_model_file_path,
